@@ -9,7 +9,6 @@ void rec(int bv[], int, int);
 
 int main()
 {
-
     FILE *fp;
     int len;
     int t;
@@ -17,31 +16,22 @@ int main()
 
     printf("\n Enter Total Block : ");
     scanf("%d", &t);
-
     bv[t];
-
     for (int i = 0; i < t; i++)
         bv[i] = 1;
-
+    printf("\n");
+    p = rand() % 10;
+    for (int i = 0; i < p; i++)
+    {
+        a = rand() % 10;
+        bv[a] = 0;
+    }
     printf("\n Bit Vector Before Allocation \n ");
     for (int i = 0; i < t; i++)
         printf("%d", bv[i]);
-
-    printf("\n");
-
-    printf("\nEnter the number of blocks already allocated: ");
-    scanf("%d", &p);
-    printf("\nEnter the blocks already allocated: ");
-    for (int i = 0; i < p; i++)
-    {
-        scanf("%d", &a);
-        bv[a] = 0;
-    }
-
     printf("\n ");
     while (op >= 1 && op <= 5)
     {
-
         printf("\n 1.Create File");
         printf("\n 2.Show bit Vector ");
         printf("\n 3.Delete File  ");
