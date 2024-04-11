@@ -1,113 +1,69 @@
-#include<stdio.h>
-#include<stdlib.h>
-#include<string.h>
-int bv[50],i,st,j,len,c,k;
-char name[10][30];
-int start[10],length[10],num=0;
-
-void displayBitVector()
-{
-     printf("\nBit Vector contents :\n");
-     for (i=0;i<50;i++)
-          printf("%d ",bv[i]);
-}
-void createFile()
-{
-     char temp[30];
-     printf("Enter the name of file : ");
-     scanf("%s",&temp);
-     for (int i=0;i<num;i++)
-          if (strcmp(name[i],temp)==0)
-          {
-              printf("\nFilename already exists");
-              return;
-          } 
-     strcpy(name[num],temp);
-     printf("Enter the start block of the file : ");
-     scanf("%d",&start[num]);
-     printf("Enter the length of the file : ");
-     scanf("%d",&length[num]);
-     
-     for (j=start[num];j<(start[num]+length[num]);j++)
-          if (bv[j]==0)
-          {
-              printf("File cannot be allocated.... block already allocated");
-              strcpy(name[j],"-");
-              start[j]=0;
-              length[j]=0;
-              return;
-          }
-     for (j=start[num];j<(start[num]+length[num]);j++)
-     {
-          bv[j]=0;
-          printf("\n%d->%d",j,bv[j]);
-     }
-     num++;
-}
-void showDirectory()
-{
-      printf("Directory contents\n");
-      printf("%s%s%s\n","File Name","Start Block","Length");
-      int i;
-      for (i=0;i<num;i++)
-      {
-           if (strcmp(name[i],"-")!=0)
-           {
-               printf("  %s    %d   %d\n",name[i],start[i],length[i]);
-           }
-      }
-}
-void deleteFile()
-{
-     char temp[10];
-     printf("\nEnter the filename : ");
-     scanf("%s",&temp);
-     for (int i=0;i<num;i++)
-     {
-          if (strcmp(name[i],temp)==0)
-          {
-             
-                   for (j=start[i];j<(start[i]+length[i]);j++)
-                   {
-                        bv[j]=1;
-                        printf("\n%d->%d",j,bv[j]);
-                   }
-                   printf("\nFile successfully deleted...");
-                   strcpy(name[i],"-");
-                   start[i]=1;
-                   length[i]=1;
-                   return;           
-          }
-     }
-}
+#include <stdio.h>
 int main()
 {
-    int ch=0;
-    for (i=0;i<50;i++)
-         bv[i]=1;
-         
-    do 
+    int n, i, st, l, op;
+    char fn[20],f[20];
+    printf("Enter the number of block in disk :");
+    scanf("%d", &n);
+    FILE *fp;
+    int blk[n];
+    for (i = 0; i < n; i++)
+        blk[i] = 1;
+    while (1)
     {
-        printf("\n---Select One Of The Option----\n");
-        printf("\n1.Show bit Vector :");
-        printf("\n2.Create New File :");
-        printf("\n3.Show Directory :");
-        printf("\n4.Delete File :");
-        printf("\n5.Exit:\n");
-        printf("\nEnter Your Choice :");
-        scanf("%d",&ch);
-        
-        switch (ch)
+        printf("\n1.Create New File : \n2.Delete : \n3.Display Disk Status : \n4.Exit :");
+        printf("\nEnter the choice : ");
+        scanf("%d", &op);
+        switch (op)
         {
-                case 1: displayBitVector();
+        case 1:
+            printf("Enter File Name :");
+            scanf("%s", &fn);
+            printf("Enter the number of starting blk no in disk :");
+            scanf("%d", &st);
+            printf("Enter the length file :");
+            scanf("%d", &l);
+            fp = fopen(fn, "w");
+            if (st + l > n)
+                printf("\n\nError....");
+            else
+                for (i = st; i < st + l; i++)
+                    if (blk[i] == 1)
+                    {
+                        printf("\nFile already created.");
                         break;
-                case 2: createFile();
-                        break;
-                case 3: showDirectory();
-                        break;
-                case 4: deleteFile();
-                        break;
+                    }
+            if (i = st + l)
+                for (i = st; i < st + l; i++)
+                {
+                    blk[i] = 0;
+                }
+            printf("\nFile created successfully");
+            break;
+
+        case 2:
+            printf("\nEnter File name to delete : ");
+            scanf("%s", f);
+            fclose(fp); // Close the file before attempting deletion
+            if (remove(f) == 0)
+                printf("\nDeleted successfully\n");
+            else
+                printf("\nUnable to delete the file\n");
+            break;
+
+        case 3:
+            for (i = 0; i < n; i++)
+                if (blk[i] == 0)
+                    printf("%d ", blk[i]);
+                else
+                    printf("%d ", blk[i]);
+            printf("\n");
+            break;
+            
+        case 4:
+            return 0;
+        default:
+            printf("Invalid choice.....");
         }
     }
-    while(ch!=5);
 }
