@@ -1,169 +1,132 @@
-#include<stdio.h>
-#include<stdlib.h>
-#include<string.h>
-#define MAX 100
+#include <stdio.h>
+#include <stdlib.h>
 
-typedef struct dir
-{
-      char fname[20];
-      int start;
-      struct dir *next;
-}NODE;
-NODE *head,*last,*temp,*prev,*dell,*tmp;
-int n,bit[MAX],fb=0;
+int bv[50], p, a;
+int st, len, k, c, j;
+char fnm[20], f[20];
 
-void init()
-{
-      int i;
-      printf("Enter total no. of disk blocks : ");
-      scanf("%d",&n);
-      for (i=0;i<n;i++)
-      {
-           bit[i]=rand()%2;
-      }
-}
-
-void show_bitvector()
-{
-     int i;
-     for (i=0;i<n;i++)
-          printf("%d ",bit[i]);
-     printf("\n");
-}
-
-void show_dir()
-{
-     NODE *temp;
-     int i;
-     printf("\nDirectory : ");
-     printf("\nFile Name   Allocated Block Number");
-     for (temp=head;temp!=NULL;temp=temp->next)
-     {
-          printf("\n %s",temp->fname);
-          printf("      %d",temp->start);
-     }
-     printf("\n\nAllocated Blocks : ");
-     for (temp=head;temp!=NULL;temp=temp->next)
-     {
-          printf("%d->",temp->start);
-     }
-     printf("NULL\n\n");
-}
-
-void create()
-{
-     NODE *p;
-     char fname[20];
-     int i,j,nob;
-     int fb=0;
-     printf("Enter file name : ");
-     scanf("%s",&fname);
-     printf("Enter the no of blocks : ");
-     scanf("%d",&nob);
-     for (i=0;i<n;i++)
-     {
-          if (bit[i]==0)
-              fb++;
-     }
-     if (nob>fb)
-     {
-         printf("Failed to create file %s\n",fname);
-         return;
-     }
-     else
-     {
-         for (i=0;i<n;i++)
-         {
-              if (bit[i]==0 && nob!=0)
-              {
-                  p=(NODE*)malloc(sizeof(NODE));
-                  strcpy(p->fname,fname);
-                  nob--;
-                  bit[i]=1;
-                  p->start=i;
-                  p->next=NULL;
-                  if (head==NULL)
-                      head=p;
-                  else
-                      last->next=p;
-                  last=p;
-              }
-         }
-         printf("File %s created successfully \n",fname);
-     }
-}
-
-void delete()
-{
-     int i=0;
-     NODE *p,*q;
-     char fname[20];
-     
-     temp=head;
-     printf("Enter file to be deleted : ");
-     scanf("%s",fname);
-     
-     while (temp!=NULL)
-     {
-            p=q=head;
-            while (p!=NULL)
-            {
-                   if (strcmp(p->fname,fname)==0)
-                       break;
-                       
-                   q=p;
-                   p=p->next;
-            }
-            
-            if (p==NULL)
-            {
-                return;
-            }
-            
-            if (p==head)
-                head=head->next;
-            else if (p==last)
-            {
-                last=q;
-                last->next=NULL;
-            }
-            else
-            {
-                 q->next=p->next;
-            }
-            bit[p->start]=0;
-            free(p);
-            temp=temp->next;
-     }
-     printf("File %s deleted successfully\n",fname);
-}
+void rec(int bv[], int, int);
 
 int main()
 {
-    int ch;
-    init();
-    while(1)
+
+    FILE *fp;
+    int len;
+    int t;
+    int op = 1;
+
+    printf("\n Enter Total Block : ");
+    scanf("%d", &t);
+
+    bv[t];
+
+    for (int i = 0; i < t; i++)
+        bv[i] = 1;
+
+    printf("\n Bit Vector Before Allocation \n ");
+    for (int i = 0; i < t; i++)
+        printf("%d", bv[i]);
+
+    printf("\n");
+
+    printf("\nEnter the number of blocks already allocated: ");
+    scanf("%d", &p);
+    printf("\nEnter the blocks already allocated: ");
+    for (int i = 0; i < p; i++)
     {
-        printf("\n*******Menu*******\n");
-        printf("\n1.Show bit Vector");
-        printf("\n2.Create New File");
-        printf("\n3.Show Directory");
-        printf("\n4.Delete File");
-        printf("\n5.Exit\n");
-        printf("\nEnter Your Choice : \n");
-        scanf("%d",&ch);
-        
-        switch (ch)
+        scanf("%d", &a);
+        bv[a] = 0;
+    }
+
+    printf("\n ");
+    while (op >= 1 && op <= 5)
+    {
+
+        printf("\n 1.Create File");
+        printf("\n 2.Show bit Vector ");
+        printf("\n 3.Delete File  ");
+        printf("\n 4.Show Directory  ");
+        printf("\n 5.Exit");
+
+        printf("\n Enter option :  ");
+        scanf("%d", &op);
+
+        switch (op)
         {
-                case 1: show_bitvector();
-                        break;
-                case 2: create();
-                        break;
-                case 3: show_dir();
-                        break;
-                case 4: delete();
-                        break;
-                case 5: exit(0);
+        case 1:
+            printf("\nEnter File name : ");
+            scanf("%s", fnm);
+
+            fp = fopen(fnm, "w");
+
+            if (fp == NULL)
+            {
+                printf("\nError opening the file.\n");
+                return 1;
+            }
+            else
+                printf("\n *** File is created *** \n ");
+
+            printf("Enter the index of the sting block and its length: ");
+            scanf("%d%d", &st, &len);
+            rec(bv, st, len);
+            // fclose(fp);
+            break;
+
+        case 2:
+            printf("\n Bit Vector After  Allocation \n ");
+            for (int i = 0; i < t; i++)
+                printf("%d", bv[i]);
+
+            printf("\n");
+            break;
+
+        case 3:
+            printf("\nEnter File name to delete : ");
+            scanf("%s", f);
+            fclose(fp); // Close the file before attempting deletion
+            if (remove(f) == 0)
+                printf("\nDeleted successfully\n");
+            else
+                printf("\nUnable to delete the file\n");
+            break;
+
+        case 4:
+            printf("\n File Details Are : \n ");
+            printf("\nF_NM\tIB\tLen\n");
+            printf("%s\t%d\t%d", fnm, st, len);
+            printf("\n");
+            break;
+
+        case 5:
+            exit(0);
         }
     }
+    fclose(fp);
+    return 0;
+}
+
+void rec(int bv[], int st, int len)
+{
+
+    k = len;
+    printf("\nFNm\tIndesx\tAllocated\n\n");
+    if (bv[st] == 1)
+    {
+        for (j = st; j < (st + k); j++)
+        {
+            if (bv[j] == 1)
+            {
+                bv[j] = 0;
+                printf("%s\t%d------->%d\n", fnm, j, bv[j]);
+            }
+            else
+            {
+                printf("\nThe block %d is already allocated \n\n", j);
+                k++;
+            }
+        }
+    }
+    else
+        printf("\nThe block %d is already allocated \n\n", st);
 }
