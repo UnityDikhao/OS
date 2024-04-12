@@ -26,9 +26,8 @@ int main()
 
       y:  printf("\n 1.Create File");
         printf("\n 2.Show bit Vector ");
-        printf("\n 3.Delete File  ");
-        printf("\n 4.Display  ");
-        printf("\n 5.Exit");
+        printf("\n 3.Show directory  ");
+        printf("\n 4.Exit");
 
 
         printf("\n Enter option :  ");
@@ -97,21 +96,13 @@ case 2 :
         printf("%d",files[i]);
     printf("\n");
     break;
-case 3:
-    printf("\nEnter File name to delete : ");
-    scanf("%s",&f);
-    if (remove(f) == 0)
-        printf("\nDeleted successfully\n");
-    else
-        printf("\nUnable to delete the file\n");
-    break;
-case 4 :
+case 3 :
     printf("\n File Details Are : \n ");
     printf("\nF_NM\tIB\tLen\n");
     printf("%s\t%d\t%d",fnm,indBlock,cnt);
     printf("\n");
     break;
-case 5 :
+case 4 :
     exit(0);
 }
 if(op!=4 )
