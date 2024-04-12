@@ -39,14 +39,13 @@ int main()
     }
 
     printf("\n ");
-    while (op >= 1 && op <= 5)
+    while (op >= 1 && op <= 4)
     {
 
         printf("\n 1.Create File");
         printf("\n 2.Show bit Vector ");
-        printf("\n 3.Delete File  ");
-        printf("\n 4.Show Directory  ");
-        printf("\n 5.Exit");
+        printf("\n 3.Show Directory  ");
+        printf("\n 4.Exit");
 
         printf("\n Enter option :  ");
         scanf("%d", &op);
@@ -80,25 +79,14 @@ int main()
 
             printf("\n");
             break;
-
         case 3:
-            printf("\nEnter File name to delete : ");
-            scanf("%s", f);
-            fclose(fp); // Close the file before attempting deletion
-            if (remove(f) == 0)
-                printf("\nDeleted successfully\n");
-            else
-                printf("\nUnable to delete the file\n");
-            break;
-
-        case 4:
             printf("\n File Details Are : \n ");
             printf("\nF_NM\tIB\tLen\n");
             printf("%s\t%d\t%d", fnm, st, len);
             printf("\n");
             break;
 
-        case 5:
+        case 4:
             exit(0);
         }
     }
